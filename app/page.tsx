@@ -2,6 +2,7 @@
 
 import { useRef, useCallback, useState } from "react"
 import Webcam from "react-webcam"
+import { useRouter } from "next/navigation"
 
 const videoConstraints = {
   width: 720,
@@ -14,8 +15,9 @@ const videoConstraints = {
 // import BackgrountImageList from "@/app/components/BackgroundImageList"
 
 export default function Page() {
+  const router = useRouter()
   const webcamRef = useRef<Webcam>(null)
-  const [url, setUrl] = useState<string | null>(null)
+  // const [url, setUrl] = useState<string | null>(null)
   const handleDownload = (url: string) => {
     const link = document.createElement('a')
     link.href = url
@@ -25,13 +27,16 @@ export default function Page() {
     document.body.removeChild(link)
     URL.revokeObjectURL(url)
   }
-  const capture = useCallback(() => {
+
+  const handleClick = useCallback((path: string) => {
     const imageSrc = webcamRef.current?.getScreenshot()
     if (imageSrc) {
-      setUrl(imageSrc)
-      handleDownload(imageSrc)
+      // setUrl(imageSrc)
+      localStorage.setItem('photoUrl', imageSrc)
+      router.push(path)
     }
-  }, [webcamRef])
+  }, [webcamRef, router])
+
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       <div>
@@ -44,8 +49,7 @@ export default function Page() {
           videoConstraints={videoConstraints}
         />
       </div>
-      <button onClick={capture}>撮影する</button>
-      <p>{url}</p>
+      <a onClick={(e) => handleClick('/photo')}>撮影する</a>
     </main>
   );
 }
