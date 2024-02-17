@@ -1,6 +1,7 @@
 "use client"
 
 import Image from "next/image";
+import Link from "next/link";
 import { useState, useEffect } from "react"
 
 export default function Page() {
@@ -20,6 +21,9 @@ export default function Page() {
         height={360}
         alt=""
       />
+      <Link href="/">
+        <button>再撮影する</button>
+      </Link>
     </main>
   );
 }
