@@ -3,6 +3,7 @@
 import { useRef, useCallback, useState } from "react"
 import Webcam from "react-webcam"
 import { useRouter } from "next/navigation"
+import Image from "next/image";
 
 const videoConstraints = {
   width: 720,
@@ -10,14 +11,15 @@ const videoConstraints = {
   facingMode: "user"
 }
 
-// import VideoArea from "@/app/components/VideoArea"
-// import ShotButton from "@/app/components/ShotButton"
-// import BackgrountImageList from "@/app/components/BackgroundImageList"
-
 export default function Page() {
   const router = useRouter()
   const webcamRef = useRef<Webcam>(null)
-  // const [url, setUrl] = useState<string | null>(null)
+  const [selectedImage, setSelectedImage] = useState('')
+
+  const selectImage = (filename: string) => {
+    setSelectedImage(filename)
+  }
+
   const handleDownload = (url: string) => {
     const link = document.createElement('a')
     link.href = url
@@ -31,7 +33,6 @@ export default function Page() {
   const handleClick = useCallback((path: string) => {
     const imageSrc = webcamRef.current?.getScreenshot()
     if (imageSrc) {
-      // setUrl(imageSrc)
       localStorage.setItem('photoUrl', imageSrc)
       router.push(path)
     }
@@ -49,7 +50,41 @@ export default function Page() {
           videoConstraints={videoConstraints}
         />
       </div>
-      <button onClick={(e) => handleClick('/photo')}>撮影する</button>
+      <button onClick={(e) => handleClick("/photo")}>撮影する</button>
+      <p>背景画像</p>
+      <p>選択した画像：{selectedImage}</p>
+      <button onClick={(e) => selectImage("1812.jpg")}>
+        <Image 
+          src="/images/1812.jpg"
+          width={270} 
+          height={180}
+          alt="背景画像"
+        />
+      </button>
+      <button onClick={(e) => selectImage("9790.jpg")}>
+        <Image 
+          src="/images/9790.jpg"
+          width={270} 
+          height={180}
+          alt="背景画像"
+        />
+      </button>
+      <button onClick={(e) => selectImage("9792.jpg")}>
+        <Image 
+          src="/images/9792.jpg"
+          width={270} 
+          height={180}
+          alt="背景画像"
+        />
+      </button>
+      <button onClick={(e) => selectImage("9793.jpg")}>
+        <Image 
+          src="/images/9793.jpg"
+          width={270} 
+          height={180}
+          alt="背景画像"
+        />
+      </button>
     </main>
   );
 }
