@@ -49,7 +49,7 @@ export default function Page() {
           videoConstraints={videoConstraints}
         />
       </div>
-      <a onClick={(e) => handleClick('/photo')}>撮影する</a>
+      <button onClick={(e) => handleClick('/photo')}>撮影する</button>
     </main>
   );
 }
