@@ -11,12 +11,14 @@ let canvasCtx: any;
 let imageSegmenter: ImageSegmenter;
 let backgroundImg: HTMLImageElement;
 let cameraTime: number;
-let backgroundName = "sample1.png";
 
-export default function CameraPreviewStream() {
+export default function CameraPreviewStream({
+  backgroundName,
+}: {
+  backgroundName: string;
+}) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [isShooting, setIsShooting] = useState<boolean>(true);
 
   const isCanvasValid = () => {
     if (canvasRef == null || canvasRef.current == null) return false;
@@ -64,22 +66,12 @@ export default function CameraPreviewStream() {
     }
   };
 
-  const startShooting = () => {
-    setIsShooting(true);
-    createVideoStream();
-  };
-
-  const stopShooting = () => {
-    setIsShooting(false);
-    removeVideoStream();
-  };
-
   useEffect(() => {
     backgroundImg = new Image();
-    backgroundImg.src = `background/${backgroundName}`;
+    backgroundImg.src = `images/${backgroundName}`;
     createImageSegmenter();
     createVideoStream();
-  }, []);
+  }, [backgroundName]);
 
   const videoCallback = (result: ImageSegmenterResult) => {
     if (!isCanvasValid()) return;
@@ -154,39 +146,23 @@ export default function CameraPreviewStream() {
     }
   };
 
-  const downloadImage = () => {
-    if (!isCanvasValid()) return;
-    const link = document.createElement("a");
-    link.download = "image.png";
-    link.href = canvas.toDataURL("image/png");
-    link.click();
-  };
+  // const downloadImage = () => {
+  //   if (!isCanvasValid()) return;
+  //   const link = document.createElement("a");
+  //   link.download = "image.png";
+  //   link.href = canvas.toDataURL("image/png");
+  //   link.click();
+  // };
 
-  const handleSelectChange = (e: any) => {
-    backgroundImg = new Image();
-    backgroundImg.src = `background/${e.target.value}`;
-  };
+  // const handleSelectChange = (e: any) => {
+  //   backgroundImg = new Image();
+  //   backgroundImg.src = `background/${e.target.value}`;
+  // };
 
   return (
     <>
       <video autoPlay={true} ref={videoRef} style={{ display: "none" }} />
       <canvas ref={canvasRef} width="640px" height="480px" />
-      {isShooting ? (
-        <>
-          <button onClick={stopShooting}>Stop</button>
-          <select onChange={handleSelectChange}>
-            <option value="sample1.png">Sample1</option>
-            <option value="sample2.png">Sample2</option>
-            <option value="sample3.png">Sample3</option>
-            <option value="sample4.png">Sample4</option>
-          </select>
-        </>
-      ) : (
-        <>
-          <button onClick={startShooting}>Start</button>
-          <button onClick={downloadImage}>Download</button>
-        </>
-      )}
     </>
   );
 }
