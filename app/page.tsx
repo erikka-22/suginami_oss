@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Image from "next/image";
 import CameraPreviewStream from "./components/CameraPreviewStream";
 
@@ -8,8 +8,14 @@ export default function Page() {
   const [selectedImage, setSelectedImage] = useState("");
   const [isShooting, setIsShooting] = useState<boolean>(true);
 
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
   const handleDownload = () => {
-    // TODO: Implement download image
+    if (canvasRef == null || canvasRef.current == null) return false;
+    const link = document.createElement("a");
+    link.download = "image.png";
+    link.href = canvasRef.current.toDataURL("image/png");
+    link.click();
   };
 
   return (
@@ -17,6 +23,7 @@ export default function Page() {
       <CameraPreviewStream
         backgroundName={selectedImage}
         isShooting={isShooting}
+        canvasRef={canvasRef}
       />
       {isShooting ? (
         <>

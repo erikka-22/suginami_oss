@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import {
   FilesetResolver,
   ImageSegmenter,
@@ -8,9 +8,11 @@ import {
 export default function CameraPreviewStream({
   backgroundName,
   isShooting,
+  canvasRef,
 }: {
   backgroundName: string;
   isShooting: boolean;
+  canvasRef: any;
 }) {
   let canvas: HTMLCanvasElement;
   let video: HTMLVideoElement;
@@ -18,7 +20,6 @@ export default function CameraPreviewStream({
   let imageSegmenter: ImageSegmenter;
   let backgroundImg: HTMLImageElement;
   let cameraTime: number;
-  const canvasRef = useRef<HTMLCanvasElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
 
   const isCanvasValid = () => {
