@@ -10,12 +10,20 @@ export default function Page() {
   const [isShooting, setIsShooting] = useState<boolean>(true);
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [canvasRefUrl, setCanvasRefUrl] = useState<string>("");
+
+  const handleShooting = () => {
+    setIsShooting(false)
+    if (canvasRef == null || canvasRef.current == null) return false;
+    setCanvasRefUrl(canvasRef.current.toDataURL("image/png"))
+    console.log(canvasRefUrl)
+  }
 
   const handleDownload = () => {
     if (canvasRef == null || canvasRef.current == null) return false;
     const link = document.createElement("a");
     link.download = "image.png";
-    link.href = canvasRef.current.toDataURL("image/png");
+    link.href = canvasRefUrl;
     link.click();
   };
 
@@ -28,7 +36,7 @@ export default function Page() {
       />
       {isShooting ? (
         <>
-          <button onClick={() => setIsShooting(false)}>撮影する</button>
+          <button onClick={() => handleShooting()}>撮影する</button>
           <p>背景画像</p>
           <p>選択した画像：{selectedImage}</p>
           <div className="flex flex-row justify-between">
@@ -70,7 +78,9 @@ export default function Page() {
         <>
           <button onClick={() => setIsShooting(true)}>カメラに戻る</button>
           <button onClick={handleDownload}>ダウンロード</button>
-          <XShareButton />
+          <XShareButton 
+            url={canvasRefUrl}
+          />
         </>
       )}
     </main>
