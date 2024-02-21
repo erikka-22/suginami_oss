@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import CameraPreviewStream from "./components/CameraPreviewStream";
+import XShareButton from "./components/XShareButton";
 
 export default function Page() {
   const [selectedImage, setSelectedImage] = useState("");
@@ -62,6 +63,7 @@ export default function Page() {
         <>
           <button onClick={() => setIsShooting(true)}>カメラに戻る</button>
           <button onClick={handleDownload}>ダウンロード</button>
+          <XShareButton />
         </>
       )}
     </main>
