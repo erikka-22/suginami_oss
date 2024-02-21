@@ -5,18 +5,19 @@ import {
   ImageSegmenterResult,
 } from "@mediapipe/tasks-vision";
 
-let canvas: HTMLCanvasElement;
-let video: HTMLVideoElement;
-let canvasCtx: any;
-let imageSegmenter: ImageSegmenter;
-let backgroundImg: HTMLImageElement;
-let cameraTime: number;
-
 export default function CameraPreviewStream({
   backgroundName,
+  isShooting,
 }: {
   backgroundName: string;
+  isShooting: boolean;
 }) {
+  let canvas: HTMLCanvasElement;
+  let video: HTMLVideoElement;
+  let canvasCtx: any;
+  let imageSegmenter: ImageSegmenter;
+  let backgroundImg: HTMLImageElement;
+  let cameraTime: number;
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
 
@@ -68,10 +69,19 @@ export default function CameraPreviewStream({
 
   useEffect(() => {
     backgroundImg = new Image();
-    backgroundImg.src = `images/${backgroundName}`;
+    if (backgroundName !== "") backgroundImg.src = `images/${backgroundName}`;
     createImageSegmenter();
-    createVideoStream();
-  }, [backgroundName]);
+
+    if (isShooting) {
+      createVideoStream();
+    } else {
+      removeVideoStream();
+    }
+
+    return () => {
+      removeVideoStream();
+    };
+  }, [backgroundName, createVideoStream, isShooting]);
 
   const videoCallback = (result: ImageSegmenterResult) => {
     if (!isCanvasValid()) return;
@@ -145,19 +155,6 @@ export default function CameraPreviewStream({
       }
     }
   };
-
-  // const downloadImage = () => {
-  //   if (!isCanvasValid()) return;
-  //   const link = document.createElement("a");
-  //   link.download = "image.png";
-  //   link.href = canvas.toDataURL("image/png");
-  //   link.click();
-  // };
-
-  // const handleSelectChange = (e: any) => {
-  //   backgroundImg = new Image();
-  //   backgroundImg.src = `background/${e.target.value}`;
-  // };
 
   return (
     <>
