@@ -38,7 +38,9 @@ export default function Page() {
         />
         {isShooting ? (
           <>
-            <Button onClick={handleShooting}>撮影する</Button>
+            <Button onClick={handleShooting} mt={2}>
+              撮影する
+            </Button>
             <Flex gap={1} mt={2}>
               <ClickableImage
                 src="images/1812.jpg"
@@ -62,9 +64,9 @@ export default function Page() {
           </>
         ) : (
           <Flex gap={1} mt={2}>
-            <Button onClick={() => setIsShooting(true)}>カメラに戻る</Button>
+            <Button onClick={() => setIsShooting(true)}>再撮影する</Button>
             <Button onClick={handleDownload}>ダウンロード</Button>
-            <XShareButton url={canvasRefUrl} />
+            <XShareButton />
           </Flex>
         )}
       </Flex>
