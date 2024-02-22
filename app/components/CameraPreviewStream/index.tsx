@@ -5,15 +5,17 @@ import {
   ImageSegmenterResult,
 } from "@mediapipe/tasks-vision";
 
+interface CameraPreviewStreamProps {
+  backgroundName: string;
+  isShooting: boolean;
+  canvasRef: any;
+}
+
 export default function CameraPreviewStream({
   backgroundName,
   isShooting,
   canvasRef,
-}: {
-  backgroundName: string;
-  isShooting: boolean;
-  canvasRef: any;
-}) {
+}: CameraPreviewStreamProps) {
   let canvas: HTMLCanvasElement;
   let video: HTMLVideoElement;
   let canvasCtx: any;
@@ -70,7 +72,7 @@ export default function CameraPreviewStream({
 
   useEffect(() => {
     backgroundImg = new Image();
-    if (backgroundName !== "") backgroundImg.src = `images/${backgroundName}`;
+    if (backgroundName !== "") backgroundImg.src = backgroundName;
     createImageSegmenter();
 
     if (isShooting) {
