@@ -94,14 +94,13 @@ export default function CameraPreviewStream({
   const videoCallback = (result: ImageSegmenterResult) => {
     if (!isCanvasValid()) return;
 
-    // Get current camear data
     const imageData = canvasCtx.getImageData(
       0,
       0,
       canvas.width,
       canvas.height
     ).data;
-    // Draw background if the background selection exist
+
     if (backgroundImg !== undefined && backgroundImg.src) {
       canvasCtx.drawImage(backgroundImg, 0, 0, canvas.width, canvas.height);
     }
@@ -114,12 +113,6 @@ export default function CameraPreviewStream({
 
     const maskResult = result.categoryMask as any;
     const mask: number[] = maskResult.getAsFloat32Array();
-    // // Make mask border smooth
-    // for (let i = 0; i < 2; i++) {
-    //   for (let j = 0; j < mask.length; j++) {
-    //     if (j + 1 < mask.length) mask[j] = (mask[j] + mask[j + 1]) / 2;
-    //   }
-    // }
 
     let j = 0;
     for (let i = 0; i < mask.length; ++i) {
@@ -136,7 +129,7 @@ export default function CameraPreviewStream({
 
       j += 4;
     }
-    // Draw segmented result
+
     const uint8Array = new Uint8ClampedArray(imageData.buffer);
     const dataNew = new ImageData(uint8Array, canvas.width, canvas.height);
     canvasCtx.putImageData(dataNew, 0, 0);
@@ -147,18 +140,15 @@ export default function CameraPreviewStream({
   const canvasCallback = async () => {
     if (!isCanvasValid()) return;
 
-    // execute callback
     if (video.currentTime === cameraTime) {
       window.requestAnimationFrame(canvasCallback);
     } else {
       cameraTime = video.currentTime;
 
-      // Draw camera
       canvasCtx?.drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
 
       if (imageSegmenter !== undefined && imageSegmenter !== null) {
         const startTimeMs = performance.now();
-        // Call videoCallback
         imageSegmenter.segmentForVideo(video, startTimeMs, videoCallback);
       }
     }
