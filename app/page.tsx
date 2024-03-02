@@ -1,8 +1,9 @@
 "use client";
 
 import { useRef, useState } from "react";
-import Image from "next/image";
 import CameraPreviewStream from "./components/CameraPreviewStream";
+import { Button, Flex } from "@chakra-ui/react";
+import ClickableImage from "./components/ClickableImage";
 import XShareButton from "./components/XShareButton";
 
 export default function Page() {
@@ -13,11 +14,11 @@ export default function Page() {
   const [canvasRefUrl, setCanvasRefUrl] = useState<string>("");
 
   const handleShooting = () => {
-    setIsShooting(false)
+    setIsShooting(false);
     if (canvasRef == null || canvasRef.current == null) return false;
-    setCanvasRefUrl(canvasRef.current.toDataURL("image/png"))
-    console.log(canvasRefUrl)
-  }
+    setCanvasRefUrl(canvasRef.current.toDataURL("image/png"));
+    console.log(canvasRefUrl);
+  };
 
   const handleDownload = () => {
     if (canvasRef == null || canvasRef.current == null) return false;
@@ -28,61 +29,47 @@ export default function Page() {
   };
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <CameraPreviewStream
-        backgroundName={selectedImage}
-        isShooting={isShooting}
-        canvasRef={canvasRef}
-      />
-      {isShooting ? (
-        <>
-          <button onClick={() => handleShooting()}>撮影する</button>
-          <p>背景画像</p>
-          <p>選択した画像：{selectedImage}</p>
-          <div className="flex flex-row justify-between">
-            <button onClick={() => setSelectedImage("1812.jpg")}>
-              <Image
-                src="/images/1812.jpg"
-                width={270}
-                height={180}
+    <main>
+      <Flex flexDir={"column"} alignItems="center">
+        <CameraPreviewStream
+          backgroundName={selectedImage}
+          isShooting={isShooting}
+          canvasRef={canvasRef}
+        />
+        {isShooting ? (
+          <>
+            <Button onClick={handleShooting} mt={2}>
+              撮影する
+            </Button>
+            <Flex gap={1} mt={2}>
+              <ClickableImage
+                src="images/1812.jpg"
                 alt="背景画像"
+                onClick={setSelectedImage}
+                isSelected={selectedImage === "images/1812.jpg"}
               />
-            </button>
-            <button onClick={() => setSelectedImage("9790.jpg")}>
-              <Image
-                src="/images/9790.jpg"
-                width={270}
-                height={180}
+              <ClickableImage
+                src="images/9790.jpg"
                 alt="背景画像"
+                onClick={setSelectedImage}
+                isSelected={selectedImage === "images/9790.jpg"}
               />
-            </button>
-            <button onClick={() => setSelectedImage("9792.jpg")}>
-              <Image
-                src="/images/9792.jpg"
-                width={270}
-                height={180}
+              <ClickableImage
+                src="images/9792.jpg"
                 alt="背景画像"
+                onClick={setSelectedImage}
+                isSelected={selectedImage === "images/9792.jpg"}
               />
-            </button>
-            {/* <button onClick={() => setSelectedImage("9793.jpg")}>
-              <Image
-                src="/images/9793.jpg"
-                width={270}
-                height={180}
-                alt="背景画像"
-              />
-            </button> */}
-          </div>
-        </>
-      ) : (
-        <>
-          <button onClick={() => setIsShooting(true)}>カメラに戻る</button>
-          <button onClick={handleDownload}>ダウンロード</button>
-          <XShareButton 
-            url={canvasRefUrl}
-          />
-        </>
-      )}
+            </Flex>
+          </>
+        ) : (
+          <Flex gap={1} mt={2}>
+            <Button onClick={() => setIsShooting(true)}>再撮影する</Button>
+            <Button onClick={handleDownload}>ダウンロード</Button>
+            <XShareButton />
+          </Flex>
+        )}
+      </Flex>
     </main>
   );
 }
