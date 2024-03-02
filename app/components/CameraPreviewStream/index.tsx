@@ -71,15 +71,20 @@ export default function CameraPreviewStream({
   };
 
   useEffect(() => {
-    backgroundImg = new Image();
-    if (backgroundName !== "") backgroundImg.src = backgroundName;
-    createImageSegmenter();
+    const setup = async () => {
+      backgroundImg = new Image();
+      if (backgroundName !== "") backgroundImg.src = backgroundName;
 
-    if (isShooting) {
-      createVideoStream();
-    } else {
-      removeVideoStream();
-    }
+      await createImageSegmenter();
+
+      if (isShooting) {
+        createVideoStream();
+      } else {
+        removeVideoStream();
+      }
+    };
+
+    setup();
 
     return () => {
       removeVideoStream();
