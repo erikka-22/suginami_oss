@@ -1,22 +1,16 @@
-export default function XShareButton({
-  url
-}: {
-  url: string
-}) {
+import { Button } from "@chakra-ui/react";
+
+export default function XShareButton() {
+  const tweetText = "スギナミ・ウェブ・ミュージアムに行ってきました";
+  const originalPageUrl = "https://www.suginamiart.tokyo/webmuseum/";
+  const hashtags = "スギナミウェブミュージアム";
   return (
-    <div>
-      <a 
-        href="https://twitter.com/share?ref_src=twsrc%5Etfw" 
-        className="twitter-share-button" 
-        data-show-count="false"
-        data-hashtags="スギナミウェブミュージアム"
-        // data-url={url}
-      >
-        ポスト
-      </a>
-      <script 
-        async src="https://platform.twitter.com/widgets.js" 
-      ></script>
-    </div>
-  )
+    <Button
+      as="a"
+      href={`https://twitter.com/share?ref_src=twsrc%5Etfw&text=${tweetText}&hashtags=${hashtags}&url=${originalPageUrl}`}
+      target="_blank"
+    >
+      ポスト
+    </Button>
+  );
 }
