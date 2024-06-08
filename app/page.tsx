@@ -4,6 +4,7 @@ import { useRef, useState } from "react";
 import { Button, Flex } from "@chakra-ui/react";
 import ClickableImage from "./components/ClickableImage";
 import XShareButton from "./components/XShareButton";
+import CameraLiveView from "./components/CameraLiveView";
 
 export default function Page() {
   const [selectedImage, setSelectedImage] = useState("");
@@ -30,6 +31,11 @@ export default function Page() {
   return (
     <main>
       <Flex flexDir={"column"} alignItems="center">
+        <CameraLiveView
+          backgroundImagePath={selectedImage}
+          isCapturing={isShooting}
+          canvasRef={canvasRef}
+        />
         {isShooting ? (
           <>
             <Button onClick={handleShooting} mt={2}>
