@@ -1,10 +1,10 @@
 "use client";
 
 import { useRef, useState } from "react";
-import CameraPreviewStream from "./components/CameraPreviewStream";
 import { Button, Flex } from "@chakra-ui/react";
 import ClickableImage from "./components/ClickableImage";
 import XShareButton from "./components/XShareButton";
+import CameraLiveView from "./components/CameraLiveView";
 
 export default function Page() {
   const [selectedImage, setSelectedImage] = useState("");
@@ -31,9 +31,9 @@ export default function Page() {
   return (
     <main>
       <Flex flexDir={"column"} alignItems="center">
-        <CameraPreviewStream
-          backgroundName={selectedImage}
-          isShooting={isShooting}
+        <CameraLiveView
+          backgroundImagePath={selectedImage}
+          isCapturing={isShooting}
           canvasRef={canvasRef}
         />
         {isShooting ? (
